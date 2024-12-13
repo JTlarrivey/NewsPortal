@@ -2,12 +2,10 @@ import { Link } from 'react-router-dom';
 import { Home, Newspaper, Globe, Tv, Bookmark, Settings } from 'lucide-react';
 
 const menuItems = [
-    { icon: Home, label: 'Home', path: '/' },
-    { icon: Newspaper, label: 'Latest News', path: '/latest' },
-    { icon: Globe, label: 'World', path: '/world' },
-    { icon: Tv, label: 'Technology', path: '/technology' },
-    { icon: Bookmark, label: 'Saved', path: '/saved' },
-    { icon: Settings, label: 'Settings', path: '/settings' }
+    { icon: Home, label: 'Principal', path: '/' },
+    { icon: Newspaper, label: 'Últimas Noticias', path: '/latest' },
+    { icon: Bookmark, label: 'Favoritos', path: '/saved' },
+    { icon: Settings, label: 'Configuración', path: '/settings' }
 ];
 
 export default function Sidebar() {
