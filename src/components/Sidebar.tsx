@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Home, Newspaper, Globe, Tv, Bookmark, Settings } from 'lucide-react';
+import { Home, Newspaper,  Bookmark, Settings } from 'lucide-react';
 
 const menuItems = [
     { icon: Home, label: 'Principal', path: '/' },
     { icon: Newspaper, label: 'Últimas Noticias', path: '/latest' },
-    { icon: Bookmark, label: 'Favoritos', path: '/saved' },
-    { icon: Settings, label: 'Configuración', path: '/settings' }
+    { icon: Bookmark, label: 'Guardados', path: '/saved' },
+    { icon: Settings, label: 'Configuraciones', path: '/settings' }
 ];
 
 export default function Sidebar() {
