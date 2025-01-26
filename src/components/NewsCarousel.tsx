@@ -10,28 +10,28 @@ interface Article {
 
 const articles: Article[] = [
 {
-    title: "The Future of AI: Breakthroughs and Challenges",
-    excerpt: "Recent developments in artificial intelligence are reshaping how we think about technology and its impact on society...",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995",
-    category: "Technology"
+    title: "La Big Mac más cara de Latinoamérica es argentina",
+    excerpt: "Según el índice Big Mac, la hamburguesa de McDonald's cuesta 7,4 dólares en Argentina, convirtiéndiose en la más cara de la región...",
+    image: "http://img.20mn.fr/o9yyTMGORKOwTFvIGJ2GhQ/2048x1536-fit_big-mac-lance-1967.jpg",
+    category: "Economía"
 },
 {
-    title: "Sustainable Cities: Building for Tomorrow",
-    excerpt: "Urban planners are revolutionizing city design with green initiatives and smart technology integration...",
-    image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000",
-    category: "Environment"
+    title: "Las fuertes declaraciones de Juan Sebastián Verón sobre el presente y futuro de Estudiantes",
+    excerpt: "El presidente del Pincha habló de todo el proyecto junto al inversor Foster Gillett, el pase de Medina, el gran objetivo y las críticas...",
+    image: "https://cdn.clarosports.com/clarosports/2024/07/veron-210652.jpg",
+    category: "Política"
 },
 {
-    title: "Global Economy: Markets in Transition",
-    excerpt: "Economic experts analyze the shifting dynamics of international trade and digital currencies...",
-    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3",
-    category: "Finance"
+    title: "Según el FMI, entre 2025 y 2026 la economía argentina será la cuarta de mayor crecimiento del mundo",
+    excerpt: "De todos modos, recién a fin del año próximo el PBI superaría con nitidez el nivel de 2022. Qué arroja la comparación de los últimos 30 años entre las tres mayores economías latinoamericanas y EEUU, qué lados tiene el “triángulo del crecimiento sustentable” y por qué la Argentina fue “el peor de la clase”...",
+    image: "https://tse2.mm.bing.net/th?id=OIP.LrdxopUIE0nLZLqilQNr4gHaEm&pid=Api&P=0&h=180",
+    category: "Economía"
 },
 {
-    title: "Space Exploration: New Frontiers",
-    excerpt: "Latest discoveries from deep space missions are changing our understanding of the universe...",
-    image: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa",
-    category: "Science"
+    title: "Asunción de Trump: un intendente argentino fue invitado a la ceremonia de gala",
+    excerpt: "El intendente de Añelo, Fernando Banderet, viajó acompañado de dos representantes de cámaras empresariales, Ignacio Iranzi y Raúl Martin...",
+    image: "https://tse2.mm.bing.net/th?id=OIP.5EZCuWipNh14fQNFs3L7xgHaEK&pid=Api&P=0&h=180",
+    category: "Política"
 }
 ];
 
@@ -79,7 +79,7 @@ export default function NewsCarousel() {
                 <h2 className="text-4xl font-bold mb-4 leading-tight">{article.title}</h2>
                 <p className="text-lg text-gray-200 mb-8">{article.excerpt}</p>
                 <button className="px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
-                Read More
+                Leer más
                 </button>
                 </div>
             </div>

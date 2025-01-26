@@ -17,7 +17,7 @@ export default function Navbar() {
                 <div className="relative mx-4">
                     <input
                     type="text"
-                    placeholder="Search news..."
+                    placeholder="Buscar noticias..."
                     className="w-64 px-4 py-1 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500"
                     />
                 <Search className="absolute right-3 top-1.5 h-5 w-5 text-gray-400" />
