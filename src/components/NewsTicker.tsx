@@ -41,7 +41,7 @@ export default function NewsTicker() {
 return (
     <div className="fixed top-16 left-0 right-0 bg-black text-[#00ff00] py-2 overflow-hidden z-50 border-y border-[#00ff00]">
         <div className="max-w-full mx-auto flex items-center">
-            <span className="font-bold mr-4 news-ticker whitespace-nowrap">BREAKING NEWS:</span>
+            <span className="font-bold mr-4 news-ticker whitespace-nowrap">ULTIMAS NOTICIAS:</span>
             <div className="overflow-hidden flex-1">
         <div className="ticker-wrapper whitespace-nowrap hover:pause-animation">
             <span 

@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Home, Newspaper,  Bookmark, Settings } from 'lucide-react';
+import { Home, Newspaper,  Bookmark, Settings, Cloud } from 'lucide-react';
 
 const menuItems = [
     { icon: Home, label: 'Principal', path: '/' },
     { icon: Newspaper, label: 'Últimas Noticias', path: '/latest' },
     { icon: Bookmark, label: 'Guardados', path: '/saved' },
+    { icon: Cloud, label: 'Clima', path: '/weather' },
     { icon: Settings, label: 'Configuraciones', path: '/settings' }
 ];
 
