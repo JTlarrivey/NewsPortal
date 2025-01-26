@@ -8,28 +8,28 @@ interface NewsItem {
 const breakingNews: NewsItem[] = [
 {
     id: 1,
-    text: "🚨 Major tech company announces revolutionary AI breakthrough",
-    link: "/news/tech-ai-breakthrough"
+    text: "🚨 Lugares para no dejar de ir si pasas por Mar del Plata",
+    link: "/news/lugares-mar-del-plata"
 },
 {
     id: 2,
-    text: "⚡ Breaking: International summit reaches historic climate agreement",
-    link: "/news/climate-summit"
+    text: "⚡ Alerta Naranja: Se espera una ola de calor en la región",
+    link: "/news/alerta-naranja"
 },
 {
     id: 3,
-    text: "🏆 National team secures dramatic victory in championship final",
-    link: "/news/sports-victory"
+    text: "🏆 Colapinto podría ser el nuevo piloto  de Red Bull",
+    link: "/news/colapinto-red-bull"
 },
 {
     id: 4,
-    text: "📈 Stock market hits record high amid economic recovery",
-    link: "/news/market-record"
+    text: "📈 Las acciones de Aluar suben un 0.57%",
+    link: "/news/aluar-acciones"
 },
 {
     id: 5,
-    text: "🌍 Scientists discover potential signs of life on distant exoplanet",
-    link: "/news/space-discovery"
+    text: "🌍 Resumen completo de la gala de asunción de Donald Trump",
+    link: "/news/asuncion-trump"
 }
 ];
 
