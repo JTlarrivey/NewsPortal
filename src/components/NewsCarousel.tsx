@@ -25,7 +25,7 @@ const articles: Article[] = [
       "Las fuertes declaraciones de Juan Sebastián Verón sobre el presente y futuro de Estudiantes",
     excerpt:
       "El presidente del Pincha habló de todo el proyecto junto al inversor Foster Gillett, el pase de Medina, el gran objetivo y las críticas...",
-    image: "https://cdn.clarosports.com/clarosports/2024/07/veron-210652.jpg",
+    image: "https://infocielo.com/wp-content/uploads/2024/12/veronjpg-14.jpg",
     category: "Política",
   },
   {
@@ -35,7 +35,7 @@ const articles: Article[] = [
     excerpt:
       "De todos modos, recién a fin del año próximo el PBI superaría con nitidez el nivel de 2022. Qué arroja la comparación de los últimos 30 años entre las tres mayores economías latinoamericanas y EEUU, qué lados tiene el “triángulo del crecimiento sustentable” y por qué la Argentina fue “el peor de la clase”...",
     image:
-      "https://tse2.mm.bing.net/th?id=OIP.LrdxopUIE0nLZLqilQNr4gHaEm&pid=Api&P=0&h=180",
+      "https://d3b5jqy5xuub7g.cloudfront.net/wp-content/uploads/2025/01/milei.jpg",
     category: "Economía",
   },
   {
@@ -45,7 +45,7 @@ const articles: Article[] = [
     excerpt:
       "El intendente de Añelo, Fernando Banderet, viajó acompañado de dos representantes de cámaras empresariales, Ignacio Iranzi y Raúl Martin...",
     image:
-      "https://tse2.mm.bing.net/th?id=OIP.5EZCuWipNh14fQNFs3L7xgHaEK&pid=Api&P=0&h=180",
+      "https://www.rionegro.com.ar/wp-content/uploads/2025/01/fernando-banderet-texas.jpg",
     category: "Política",
   },
 ];
