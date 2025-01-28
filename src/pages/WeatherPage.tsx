@@ -58,7 +58,7 @@ export default function WeatherPage() {
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const API_KEY = "70692e3f3275b6ab2ee59fedc8d9bab5";
+        const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
         const weatherPromises = cities.map(async (city) => {
           try {
             // Current weather
