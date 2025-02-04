@@ -7,25 +7,25 @@ import AdBanner from "./components/AdBanner";
 import Home from "./pages/Home";
 import NewsPage from "./pages/NewsPage";
 import WeatherPage from "./pages/WeatherPage";
+import SavedPage from "./pages/SavedPage";
+import ArticlePage from "./pages/ArticlePage";
 
 // Example news data
 const exampleNews = {
-  category: "Technology",
+  category: "Política",
   title:
-    "Revolutionary AI Model Breaks New Ground in Natural Language Processing",
+    "Resumen completo de la Gala de asunción de Donald Trump como presidente de los Estados Unidos",
   excerpt:
-    "A groundbreaking new AI model has demonstrated unprecedented capabilities in understanding and generating human language, marking a significant milestone in the field of artificial intelligence.",
-  content: `In a remarkable breakthrough announced today, researchers have unveiled a new artificial intelligence model that pushes the boundaries of natural language processing to new heights. The model, developed through a collaborative effort between leading tech institutions, demonstrates an unprecedented ability to understand context, generate human-like responses, and even grasp subtle nuances in communication.
-
-The development team, led by Dr. Sarah Chen, spent over two years refining the algorithm and training it on a diverse dataset of multilingual content. "What sets this model apart is its ability to understand not just the literal meaning of words, but the broader context and cultural implications," explains Dr. Chen.
-
-Early tests have shown the model achieving accuracy rates of 98.7% in comprehension tasks, significantly outperforming previous benchmarks. The implications of this advancement extend far beyond academic research, with potential applications in education, healthcare, and global communication.
-
-Industry experts are already calling this development a "quantum leap" in AI technology, predicting it could revolutionize how we interact with machines and bridge language barriers across the globe.`,
-  author: "Michael Chang",
-  date: "March 15, 2024",
-  image:
-    "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80",
+    "Una jornada llena de expectativa y polémica en la que no faltaron representantes de ningún rincón del mundo.",
+  content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunce,
+  
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor
+  ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. 
+  lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc.`,
+  author: "Matias Russo",
+  date: "4 de Febrero, 2025",
+  image: "https://www.clarin.com/img/2025/01/17/P-1gJ2FPO_720x0__1.jpg",
   videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
 };
 
@@ -41,11 +41,13 @@ export default function App() {
             <main>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/news" element={<NewsPage />} />
                 <Route
                   path="/news/:id"
-                  element={<NewsPage {...exampleNews} />}
+                  element={<ArticlePage {...exampleNews} />}
                 />
                 <Route path="/weather" element={<WeatherPage />} />
+                <Route path="/saved" element={<SavedPage />} />
               </Routes>
             </main>
           </div>

@@ -1,5 +1,6 @@
-import { Clock, MessageSquare, Share2 } from "lucide-react";
+import { Clock, Share2, Bookmark } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 interface ArticleProps {
   id: number;
@@ -8,7 +9,6 @@ interface ArticleProps {
   image: string;
   category: string;
   readTime: string;
-  comments: number;
 }
 
 export default function ArticleCard({
@@ -18,10 +18,54 @@ export default function ArticleCard({
   image,
   category,
   readTime,
-  comments,
 }: ArticleProps) {
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    // Check if article is saved on component mount
+    const savedArticles = JSON.parse(
+      localStorage.getItem("savedArticles") || "[]"
+    );
+    setIsSaved(savedArticles.some((article: any) => article.id === id));
+  }, [id]);
+
+  const handleSave = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent navigation when clicking the save button
+    const savedArticles = JSON.parse(
+      localStorage.getItem("savedArticles") || "[]"
+    );
+
+    if (isSaved) {
+      // Remove from saved articles
+      const updatedSavedArticles = savedArticles.filter(
+        (article: any) => article.id !== id
+      );
+      localStorage.setItem(
+        "savedArticles",
+        JSON.stringify(updatedSavedArticles)
+      );
+      setIsSaved(false);
+    } else {
+      // Add to saved articles
+      const articleToSave = {
+        id,
+        title,
+        excerpt,
+        image,
+        category,
+        readTime,
+        savedAt: new Date().toISOString(),
+      };
+      localStorage.setItem(
+        "savedArticles",
+        JSON.stringify([...savedArticles, articleToSave])
+      );
+      setIsSaved(true);
+    }
+  };
+
   return (
-    <article className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <article className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
       <img
         src={image}
         alt={title}
@@ -41,8 +85,14 @@ export default function ArticleCard({
           <div className="flex items-center text-gray-500 text-sm">
             <Clock className="h-4 w-4 mr-1" />
             <span className="mr-4">{readTime}</span>
-            <MessageSquare className="h-4 w-4 mr-1" />
-            <span className="mr-4">{comments}</span>
+            <button
+              onClick={handleSave}
+              className="mr-4 hover:text-blue-600 transition-colors"
+            >
+              <Bookmark
+                className={`h-4 w-4 ${isSaved ? "fill-current" : ""}`}
+              />
+            </button>
             <Share2 className="h-4 w-4 cursor-pointer hover:text-blue-600" />
           </div>
           <Link
