@@ -31,6 +31,7 @@ export interface Database {
           category: string;
           author_id: string;
           read_time: string;
+          video_url: string | null;
         };
         Insert: {
           id?: string;
@@ -42,6 +43,7 @@ export interface Database {
           category: string;
           author_id: string;
           read_time: string;
+          video_url?: string | null;
         };
         Update: {
           id?: string;
@@ -53,6 +55,7 @@ export interface Database {
           category?: string;
           author_id?: string;
           read_time?: string;
+          video_url?: string | null;
         };
       };
       saved_articles: {
