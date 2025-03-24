@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { X, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../hooks/useAuth";
 
 interface AuthFormsProps {
   isOpen: boolean;
@@ -16,13 +17,52 @@ export default function AuthForms({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const { signIn, signUp, signInWithGoogle, confirmationSent } = useAuth();
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", { email, password });
+    setError(null);
+    setLoading(true);
+
+    try {
+      if (formType === "register") {
+        if (password !== confirmPassword) {
+          throw new Error("Las contraseñas no coinciden");
+        }
+        const { error } = await signUp(email, password);
+        if (error) throw error;
+      } else {
+        const { error } = await signIn(email, password);
+        if (error) throw error;
+      }
+
+      if (!confirmationSent) {
+        onClose();
+      }
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setError(null);
+    setLoading(true);
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) throw error;
+      onClose();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,6 +78,20 @@ export default function AuthForms({
         <h2 className="text-2xl font-bold text-center mb-6">
           {formType === "login" ? "Iniciar Sesión" : "Crear Cuenta"}
         </h2>
+
+        {confirmationSent && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+            Se ha enviado un correo de confirmación a tu dirección de email. Por
+            favor, revisa tu bandeja de entrada y sigue las instrucciones para
+            activar tu cuenta.
+          </div>
+        )}
+
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -106,9 +160,14 @@ export default function AuthForms({
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
+            disabled={loading || confirmationSent}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
           >
-            {formType === "login" ? "Iniciar Sesión" : "Crear Cuenta"}
+            {loading
+              ? "Cargando..."
+              : formType === "login"
+              ? "Iniciar Sesión"
+              : "Crear Cuenta"}
           </button>
         </form>
 
@@ -124,7 +183,11 @@ export default function AuthForms({
             </div>
           </div>
 
-          <button className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+          <button
+            onClick={handleGoogleSignIn}
+            disabled={loading || confirmationSent}
+            className="mt-4 w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
