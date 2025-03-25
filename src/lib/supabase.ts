@@ -78,6 +78,55 @@ export interface Database {
           created_at?: string;
         };
       };
+      ticker_items: {
+        Row: {
+          id: string;
+          text: string;
+          link: string;
+          active: boolean;
+          order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          text: string;
+          link: string;
+          active?: boolean;
+          order: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          text?: string;
+          link?: string;
+          active?: boolean;
+          order?: number;
+          created_at?: string;
+        };
+      };
+      carousel_items: {
+        Row: {
+          id: string;
+          article_id: string;
+          active: boolean;
+          order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          article_id: string;
+          active?: boolean;
+          order: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          article_id?: string;
+          active?: boolean;
+          order?: number;
+          created_at?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never;
