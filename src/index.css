@@ -3,82 +3,82 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        @apply antialiased text-gray-800;
-    }
+  body {
+    @apply antialiased text-gray-800;
+  }
 }
 
 @layer components {
-    .article-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 1.5rem;
-}
+  .article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
 }
 
 @font-face {
-    font-family: 'Digital';
-    src: url('https://fonts.cdnfonts.com/css/ds-digital') format('woff2');
+  font-family: "Digital";
+  src: url("https://fonts.cdnfonts.com/css/ds-digital") format("woff2");
 }
 
 .news-ticker {
-    font-family: 'Digital', monospace;
-    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+  font-family: "Digital", monospace;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
 }
 
 .ticker-wrapper {
-    display: inline-flex;
-    animation: none;
+  display: inline-flex;
+  animation: none;
 }
 
 @keyframes ticker {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
     transform: translateX(-100%);
-    }
+  }
 }
 
 .animate-ticker {
-    animation: ticker 30s linear infinite;
+  animation: ticker 30s linear infinite;
 }
 
 .hover\:pause-animation:hover .animate-ticker {
-    animation-play-state: paused;
+  animation-play-state: paused;
 }
 
 @keyframes glow {
-    from {
+  from {
     text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00;
-    }
-    to {
+  }
+  to {
     text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
-    }
+  }
 }
 
 @keyframes slideLeft {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 @keyframes slideUp {
-    from {
-        transform: translateY(100%);
-    }
-    to {
-        transform: translateY(0);
-    }
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .animate-slide-left {
-    animation: slideLeft 0.5s ease-out forwards;
+  animation: slideLeft 0.5s ease-out forwards;
 }
 
 .animate-slide-up {
-    animation: slideUp 0.5s ease-out forwards;
+  animation: slideUp 0.5s ease-out forwards;
 }

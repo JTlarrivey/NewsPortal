@@ -6,9 +6,11 @@ import {
   User,
   LogIn,
   UserPlus,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import AuthForms from "./AuthForms";
 
 export default function Navbar() {
@@ -16,6 +18,25 @@ export default function Navbar() {
   const [authFormType, setAuthFormType] = useState<"login" | "register">(
     "login"
   );
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const isDarkMode = document.documentElement.classList.contains("dark");
+    setIsDark(isDarkMode);
+  }, []);
+
+  const toggleDarkMode = () => {
+    const newMode = !isDark;
+    setIsDark(newMode);
+
+    if (newMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.theme = "dark";
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.theme = "light";
+    }
+  };
 
   const handleAuthClick = (type: "login" | "register") => {
     setAuthFormType(type);
@@ -24,12 +45,15 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-50 bg-white shadow-md">
+      <nav className="sticky top-0 z-50 bg-white dark:bg-gray-800 shadow-md transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <MenuIcon className="h-6 w-6 text-gray-600 cursor-pointer hover:text-gray-900" />
-              <Link to="/" className="ml-4 text-xl font-bold text-gray-900">
+              <MenuIcon className="h-6 w-6 text-gray-600 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-white" />
+              <Link
+                to="/"
+                className="ml-4 text-xl font-bold text-gray-900 dark:text-white"
+              >
                 Prisma
               </Link>
             </div>
@@ -39,18 +63,30 @@ export default function Navbar() {
                 <input
                   type="text"
                   placeholder="Buscar noticias..."
-                  className="w-64 px-4 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-64 px-4 py-1 rounded-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <Search className="absolute right-3 top-1.5 h-5 w-5 text-gray-400" />
               </div>
 
               <div className="flex items-center space-x-4">
-                <Bell className="h-6 w-6 text-gray-600 cursor-pointer hover:text-gray-900" />
+                <Bell className="h-6 w-6 text-gray-600 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-white" />
+
+                {/* Dark Mode Toggle */}
+                <button
+                  onClick={toggleDarkMode}
+                  className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  {isDark ? (
+                    <Sun className="h-6 w-6 text-gray-300 hover:text-white" />
+                  ) : (
+                    <Moon className="h-6 w-6 text-gray-600 hover:text-gray-900" />
+                  )}
+                </button>
 
                 {/* Auth Menu */}
                 <Menu as="div" className="relative">
                   <Menu.Button className="flex items-center">
-                    <User className="h-6 w-6 text-gray-600 hover:text-gray-900" />
+                    <User className="h-6 w-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" />
                   </Menu.Button>
                   <Transition
                     as={Fragment}
@@ -61,7 +97,7 @@ export default function Navbar() {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                   >
-                    <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                    <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 dark:divide-gray-700 rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                       <div className="px-1 py-1">
                         <Menu.Item>
                           {({ active }) => (
@@ -70,7 +106,7 @@ export default function Navbar() {
                               className={`${
                                 active
                                   ? "bg-blue-500 text-white"
-                                  : "text-gray-900"
+                                  : "text-gray-900 dark:text-gray-300"
                               } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               <LogIn className="mr-2 h-5 w-5" />
@@ -85,7 +121,7 @@ export default function Navbar() {
                               className={`${
                                 active
                                   ? "bg-blue-500 text-white"
-                                  : "text-gray-900"
+                                  : "text-gray-900 dark:text-gray-300"
                               } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               <UserPlus className="mr-2 h-5 w-5" />
@@ -102,7 +138,7 @@ export default function Navbar() {
                               className={`${
                                 active
                                   ? "bg-blue-500 text-white"
-                                  : "text-gray-900"
+                                  : "text-gray-900 dark:text-gray-300"
                               } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">

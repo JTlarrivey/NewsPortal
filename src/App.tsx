@@ -9,30 +9,25 @@ import NewsPage from "./pages/NewsPage";
 import WeatherPage from "./pages/WeatherPage";
 import SavedPage from "./pages/SavedPage";
 import ArticlePage from "./pages/ArticlePage";
-
-// Example news data
-const exampleNews = {
-  category: "Política",
-  title:
-    "Resumen completo de la Gala de asunción de Donald Trump como presidente de los Estados Unidos",
-  excerpt:
-    "Una jornada llena de expectativa y polémica en la que no faltaron representantes de ningún rincón del mundo.",
-  content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunce,
-  
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor
-  ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. 
-  lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit.
-  Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc. lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec ante auctor, ultricies nunc nec, ultricies nunc.`,
-  author: "Matias Russo",
-  date: "4 de Febrero, 2025",
-  image: "https://www.clarin.com/img/2025/01/17/P-1gJ2FPO_720x0__1.jpg",
-  videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-};
+import { useEffect } from "react";
 
 export default function App() {
+  useEffect(() => {
+    // Check for saved theme preference or default to light
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
         <Navbar />
         <NewsTicker />
         <div className="mt-12">
@@ -42,10 +37,7 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/news" element={<NewsPage />} />
-                <Route
-                  path="/news/:id"
-                  element={<ArticlePage {...exampleNews} />}
-                />
+                <Route path="/news/:id" element={<ArticlePage />} />
                 <Route path="/weather" element={<WeatherPage />} />
                 <Route path="/saved" element={<SavedPage />} />
               </Routes>
@@ -67,14 +59,16 @@ export default function App() {
           link="https://example.com/ad2"
         />
         <AdBanner
-          position="side"
+          position="center"
           imageUrl="https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&q=80"
           link="https://example.com/ad3"
+          delay={0}
         />
         <AdBanner
-          position="bottom"
+          position="bottom-right"
           imageUrl="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&q=80"
           link="https://example.com/ad4"
+          delay={0}
         />
       </div>
     </Router>

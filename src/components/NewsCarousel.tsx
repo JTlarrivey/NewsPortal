@@ -1,64 +1,62 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { Link } from "react-router-dom";
+import type { Database } from "../lib/supabase";
 
-interface Article {
-  id: number;
-  title: string;
-  excerpt: string;
-  image: string;
-  category: string;
-}
-
-const articles: Article[] = [
-  {
-    id: 1,
-    title: "La Big Mac más cara de Latinoamérica es argentina",
-    excerpt:
-      "Según el índice Big Mac, la hamburguesa de McDonald's cuesta 7,4 dólares en Argentina, convirtiéndiose en la más cara de la región...",
-    image:
-      "http://img.20mn.fr/o9yyTMGORKOwTFvIGJ2GhQ/2048x1536-fit_big-mac-lance-1967.jpg",
-    category: "Economía",
-  },
-  {
-    id: 2,
-    title:
-      "Las fuertes declaraciones de Juan Sebastián Verón sobre el presente y futuro de Estudiantes",
-    excerpt:
-      "El presidente del Pincha habló de todo el proyecto junto al inversor Foster Gillett, el pase de Medina, el gran objetivo y las críticas...",
-    image: "https://infocielo.com/wp-content/uploads/2024/12/veronjpg-14.jpg",
-    category: "Política",
-  },
-  {
-    id: 3,
-    title:
-      "Según el FMI, entre 2025 y 2026 la economía argentina será la cuarta de mayor crecimiento del mundo",
-    excerpt:
-      "De todos modos, recién a fin del año próximo el PBI superaría con nitidez el nivel de 2022. Qué arroja la comparación de los últimos 30 años entre las tres mayores economías latinoamericanas y EEUU, qué lados tiene el “triángulo del crecimiento sustentable” y por qué la Argentina fue “el peor de la clase”...",
-    image:
-      "https://d3b5jqy5xuub7g.cloudfront.net/wp-content/uploads/2025/01/milei.jpg",
-    category: "Economía",
-  },
-  {
-    id: 4,
-    title:
-      "Asunción de Trump: un intendente argentino fue invitado a la ceremonia de gala",
-    excerpt:
-      "El intendente de Añelo, Fernando Banderet, viajó acompañado de dos representantes de cámaras empresariales, Ignacio Iranzi y Raúl Martin...",
-    image:
-      "https://www.rionegro.com.ar/wp-content/uploads/2025/01/fernando-banderet-texas.jpg",
-    category: "Política",
-  },
-];
+type Article = Database["public"]["Tables"]["articles"]["Row"];
 
 export default function NewsCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchCarouselArticles = async () => {
+      try {
+        const { data: carouselItems } = await supabase
+          .from("carousel_items")
+          .select(
+            `
+            article_id,
+            order,
+            articles (
+              id,
+              title,
+              excerpt,
+              image_url,
+              category
+            )
+          `
+          )
+          .eq("active", true)
+          .order("order");
+
+        if (carouselItems) {
+          const articlesData = carouselItems
+            .flatMap((item) => item.articles) // Aplana la estructura
+            .filter((article): article is Article => article !== null);
+
+          setArticles(articlesData);
+        }
+      } catch (error) {
+        console.error("Error fetching carousel articles:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCarouselArticles();
+  }, []);
+
+  useEffect(() => {
+    if (articles.length === 0) return;
+
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % articles.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [articles.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % articles.length);
@@ -68,11 +66,27 @@ export default function NewsCarousel() {
     setCurrentSlide((prev) => (prev - 1 + articles.length) % articles.length);
   };
 
+  if (loading) {
+    return (
+      <div className="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center bg-gray-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (articles.length === 0) {
+    return (
+      <div className="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center bg-gray-100">
+        <p className="text-gray-500">No hay artículos destacados</p>
+      </div>
+    );
+  }
+
   return (
     <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden">
       {articles.map((article, index) => (
         <div
-          key={index}
+          key={article.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
@@ -80,7 +94,7 @@ export default function NewsCarousel() {
           {/* Background Image with Gradient Overlay */}
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${article.image})` }}
+            style={{ backgroundImage: `url(${article.image_url})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
           </div>
@@ -95,9 +109,12 @@ export default function NewsCarousel() {
                 {article.title}
               </h2>
               <p className="text-lg text-gray-200 mb-8">{article.excerpt}</p>
-              <button className="px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
+              <Link
+                to={`/news/${article.id}`}
+                className="px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors"
+              >
                 Leer más
-              </button>
+              </Link>
             </div>
           </div>
         </div>
