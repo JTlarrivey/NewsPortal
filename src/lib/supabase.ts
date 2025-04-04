@@ -22,6 +22,7 @@ export interface Database {
     Tables: {
       articles: {
         Row: {
+          author_name: string;
           id: string;
           created_at: string;
           title: string;
@@ -56,6 +57,22 @@ export interface Database {
           author_id?: string;
           read_time?: string;
           video_url?: string | null;
+        };
+      };
+      article_metrics: {
+        Row: {
+          article_id: string;
+          views: number;
+          updated_at: string;
+        };
+        Insert: {
+          article_id: string;
+          views: number;
+          updated_at: string;
+        };
+        Update: {
+          views?: number;
+          updated_at?: string;
         };
       };
       saved_articles: {
