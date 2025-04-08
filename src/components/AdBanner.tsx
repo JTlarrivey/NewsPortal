@@ -1,64 +1,49 @@
-import { useState, useEffect } from "react";
-import { Dialog } from "@headlessui/react";
+import { useState } from "react";
 import { X } from "lucide-react";
 
-interface AdPopupProps {
-  delay: number;
-  position: "center" | "bottom-right";
+interface AdBannerProps {
+  position: "side" | "bottom";
   imageUrl: string;
   link: string;
 }
 
-export default function AdPopup({
-  delay,
-  position,
-  imageUrl,
-  link,
-}: AdPopupProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function AdBanner({ position, imageUrl, link }: AdBannerProps) {
+  const [isVisible, setIsVisible] = useState(true);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, delay);
-
-    return () => clearTimeout(timer);
-  }, [delay]);
+  if (!isVisible) return null;
 
   const positionClasses = {
-    center: "fixed inset-0 z-50 overflow-y-auto",
-    "bottom-right": "fixed bottom-4 right-4 z-50",
+    side: "fixed right-0 top-[30%] w-[160px] mr-4",
+    bottom: "fixed bottom-[3.5rem] left-0 right-0 w-full h-[90px]",
+  };
+
+  const slideClasses = {
+    side: "animate-slide-left",
+    bottom: "animate-slide-up",
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onClose={() => setIsOpen(false)}
-      className={positionClasses[position]}
+    <div
+      className={`${positionClasses[position]} ${slideClasses[position]} z-40 group`}
     >
-      <div className="min-h-screen px-4 text-center">
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-
-        <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-          <div className="absolute top-0 right-0 pt-4 pr-4">
-            <button
-              type="button"
-              className="text-gray-400 hover:text-gray-500"
-              onClick={() => setIsOpen(false)}
-            >
-              <X className="h-6 w-6" />
-            </button>
-          </div>
-
-          <a href={link} target="_blank" rel="noopener noreferrer">
-            <img
-              src={imageUrl}
-              alt="Advertisement"
-              className="w-full h-auto rounded-lg"
-            />
-          </a>
-        </div>
-      </div>
-    </Dialog>
+      <button
+        onClick={() => setIsVisible(false)}
+        className="absolute -top-2 -right-2 bg-black text-white rounded-full p-1 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <X className="h-4 w-4" />
+      </button>
+      <a
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full h-full"
+      >
+        <img
+          src={imageUrl}
+          alt="Advertisement"
+          className="w-full h-full object-cover rounded-lg shadow-lg"
+        />
+      </a>
+    </div>
   );
 }

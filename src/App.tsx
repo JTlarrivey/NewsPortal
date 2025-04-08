@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import NewsTicker from "./components/NewsTicker";
 import AdPopup from "./components/AdPopup";
 import AdBanner from "./components/AdBanner";
+import DollarRates from "./components/DollarRates";
 import Home from "./pages/Home";
 import NewsPage from "./pages/NewsPage";
 import WeatherPage from "./pages/WeatherPage";
@@ -33,7 +34,9 @@ export default function App() {
         <div className="mt-12">
           <Sidebar />
           <div className="pl-64">
-            <main>
+            <main className="pb-16">
+              {" "}
+              {/* Added padding to prevent content from being hidden by the footer */}
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/news" element={<NewsPage />} />
@@ -59,17 +62,18 @@ export default function App() {
           link="https://example.com/ad2"
         />
         <AdBanner
-          position="center"
+          position="side"
           imageUrl="https://images.unsplash.com/photo-1560769629-975ec94e6a86?w=200&q=80"
           link="https://example.com/ad3"
-          delay={0}
         />
         <AdBanner
-          position="bottom-right"
+          position="bottom"
           imageUrl="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&q=80"
           link="https://example.com/ad4"
-          delay={0}
         />
+
+        {/* Dollar Rates Footer */}
+        <DollarRates />
       </div>
     </Router>
   );
