@@ -1,40 +1,43 @@
 import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
+import { getActiveAds } from "../lib/api";
+import type { Ad } from "../lib/api";
 
-interface AdPopupProps {
-  delay: number;
-  position: "center" | "bottom-right";
-  imageUrl: string;
-  link: string;
-}
-
-export default function AdPopup({
-  delay,
-  position,
-  imageUrl,
-  link,
-}: AdPopupProps) {
+export default function AdPopup() {
   const [isOpen, setIsOpen] = useState(false);
+  const [ad, setAd] = useState<Ad | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, delay);
+    const fetchAd = async () => {
+      try {
+        const ads = await getActiveAds();
+        const popupAd = ads.find((ad) => ad.position === "popup");
+        setAd(popupAd || null);
+        if (popupAd) {
+          // Show popup after 3 seconds
+          setTimeout(() => setIsOpen(true), 3000);
+        }
+      } catch (err) {
+        console.error("Error fetching popup ad:", err);
+        setError("Failed to load advertisement");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return () => clearTimeout(timer);
-  }, [delay]);
+    fetchAd();
+  }, []);
 
-  const positionClasses = {
-    center: "fixed inset-0 z-50 overflow-y-auto",
-    "bottom-right": "fixed bottom-4 right-4 z-50",
-  };
+  if (loading || error || !ad) return null;
 
   return (
     <Dialog
       open={isOpen}
       onClose={() => setIsOpen(false)}
-      className={positionClasses[position]}
+      className="fixed inset-0 z-50 overflow-y-auto"
     >
       <div className="min-h-screen px-4 text-center">
         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
@@ -50,10 +53,10 @@ export default function AdPopup({
             </button>
           </div>
 
-          <a href={link} target="_blank" rel="noopener noreferrer">
+          <a href={ad.link_url} target="_blank" rel="noopener noreferrer">
             <img
-              src={imageUrl}
-              alt="Advertisement"
+              src={ad.image_url}
+              alt={ad.title}
               className="w-full h-auto rounded-lg"
             />
           </a>

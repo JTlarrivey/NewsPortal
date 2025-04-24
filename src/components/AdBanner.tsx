@@ -1,16 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { getActiveAds } from "../lib/api";
+import type { Ad } from "../lib/api";
 
 interface AdBannerProps {
   position: "side" | "bottom";
-  imageUrl: string;
-  link: string;
 }
 
-export default function AdBanner({ position, imageUrl, link }: AdBannerProps) {
+export default function AdBanner({ position }: AdBannerProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const [ad, setAd] = useState<Ad | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!isVisible) return null;
+  useEffect(() => {
+    const fetchAd = async () => {
+      try {
+        const ads = await getActiveAds();
+        const positionAd = ads.find((ad) => ad.position === position);
+        setAd(positionAd || null);
+      } catch (err) {
+        console.error("Error fetching ad:", err);
+        setError("Failed to load advertisement");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAd();
+    // Refresh ads every 5 minutes
+    const interval = setInterval(fetchAd, 300000);
+
+    return () => clearInterval(interval);
+  }, [position]);
+
+  if (!isVisible || loading || error || !ad) return null;
 
   const positionClasses = {
     side: "fixed right-0 top-[30%] w-[160px] mr-4",
@@ -33,14 +57,14 @@ export default function AdBanner({ position, imageUrl, link }: AdBannerProps) {
         <X className="h-4 w-4" />
       </button>
       <a
-        href={link}
+        href={ad.link_url}
         target="_blank"
         rel="noopener noreferrer"
         className="block w-full h-full"
       >
         <img
-          src={imageUrl}
-          alt="Advertisement"
+          src={ad.image_url}
+          alt={ad.title}
           className="w-full h-full object-cover rounded-lg shadow-lg"
         />
       </a>
