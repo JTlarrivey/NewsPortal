@@ -93,9 +93,13 @@ export default function ArticleCard({
             {category}
           </span>
         </div>
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer">
+        <Link
+          to={`/news/${id}`}
+          className="block text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-blue-600 dark:hover:text-blue-400"
+        >
           {title}
-        </h2>
+        </Link>
+
         <p className="text-gray-600 dark:text-gray-300 mb-4">{excerpt}</p>
         <div className="flex items-center justify-between">
           <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm">

@@ -154,11 +154,10 @@ export default function ArticlePage() {
       </div>
 
       {/* Article Content */}
-      <div className="prose prose-lg dark:prose-invert max-w-none mb-12">
-        <p className="whitespace-pre-line text-gray-800 dark:text-gray-200">
-          {article.content}
-        </p>
-      </div>
+      <div
+        className="prose prose-lg dark:prose-invert max-w-none mb-12"
+        dangerouslySetInnerHTML={{ __html: article.content || "" }}
+      />
 
       {/* Video Section (if provided) */}
       {article.video_url && (
