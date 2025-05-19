@@ -10,11 +10,12 @@ import NewsPage from "./pages/NewsPage";
 import WeatherPage from "./pages/WeatherPage";
 import SavedPage from "./pages/SavedPage";
 import ArticlePage from "./pages/ArticlePage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   useEffect(() => {
-    // Check for saved theme preference or default to light
     if (
       localStorage.theme === "dark" ||
       (!("theme" in localStorage) &&
@@ -26,14 +27,26 @@ export default function App() {
     }
   }, []);
 
+  // Prevención de scroll horizontal global
+  useEffect(() => {
+    document.body.style.overflowX = "hidden";
+    return () => {
+      document.body.style.overflowX = "auto";
+    };
+  }, []);
+
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-        <Navbar />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200 overflow-x-hidden">
+        <Navbar toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <NewsTicker />
-        <div className="mt-12">
-          <Sidebar />
-          <div className="pl-64">
+
+        <div className="mt-12 flex">
+          <Sidebar
+            isOpen={isSidebarOpen}
+            closeSidebar={() => setIsSidebarOpen(false)}
+          />
+          <div className="flex-1 px-4 sm:px-6 md:px-8 transition-all duration-300">
             <main className="pb-16">
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -46,12 +59,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* Advertisement Components */}
         <AdBanner position="side" />
         <AdBanner position="bottom" />
         <AdPopup />
 
-        {/* Dollar Rates Footer */}
         <DollarRates />
       </div>
     </Router>

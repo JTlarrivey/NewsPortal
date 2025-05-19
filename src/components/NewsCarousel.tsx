@@ -101,7 +101,7 @@ export default function NewsCarousel() {
 
           {/* Content */}
           <div className="absolute inset-0 flex items-end justify-start p-12 text-white">
-            <div className="max-w-2xl">
+            <div className="w-full max-w-5xl lg:max-w-6xl pr-8">
               <span className="inline-block px-4 py-1 mb-4 text-sm font-semibold bg-white/20 backdrop-blur-sm rounded-full">
                 {article.category}
               </span>
