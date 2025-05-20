@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import {
   Menu as MenuIcon,
   Search,
-  Bell,
   User,
   LogIn,
   UserPlus,
@@ -73,11 +72,6 @@ export default function Navbar({ toggleSidebar }: NavbarProps) {
               </div>
 
               <div className="flex items-center space-x-4">
-                <Bell
-                  className="h-6 w-6 text-gray-600 dark:text-gray-300 cursor-pointer hover:text-gray-900 dark:hover:text-white"
-                  aria-label="Notificaciones"
-                />
-
                 <button
                   onClick={toggleDarkMode}
                   className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

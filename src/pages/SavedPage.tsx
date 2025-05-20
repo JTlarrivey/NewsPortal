@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "../hooks/useUser";
+import { supabase } from "../lib/supabase";
 import ArticleCard from "../components/ArticleCard";
 
 interface SavedArticle {
-  id: number;
+  id: string;
   title: string;
   excerpt: string;
   image: string;
@@ -12,26 +14,61 @@ interface SavedArticle {
 }
 
 export default function SavedPage() {
+  const { user } = useUser();
   const [savedArticles, setSavedArticles] = useState<SavedArticle[]>([]);
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
 
   useEffect(() => {
-    // Load saved articles from localStorage
-    const loadSavedArticles = () => {
-      const articles = JSON.parse(
-        localStorage.getItem("savedArticles") || "[]"
-      );
+    if (!user) {
+      console.log("No user logged in");
+      return;
+    }
+
+    console.log("User logged in:", user);
+    console.log("User ID:", user.id);
+
+    const fetchSavedArticles = async () => {
+      const { data, error } = await supabase
+        .from("saved_articles")
+        .select(
+          `
+          created_at,
+          article_id (
+            id,
+            title,
+            excerpt,
+            image_url,
+            category,
+            read_time,
+            author_name
+          )
+        `
+        )
+        .eq("user_id", user.id);
+
+      if (error) {
+        console.error("Error fetching saved articles:", error);
+        return;
+      }
+
+      console.log("Data fetched from Supabase:", data);
+
+      const articles = data
+        .filter((item: any) => item.article_id !== null)
+        .map((item: any) => ({
+          ...item.article_id,
+          image: item.article_id.image_url, // Renombramos aquí
+          readTime: item.article_id.read_time,
+          savedAt: item.created_at,
+        }));
+
+      console.log("Mapped articles:", articles);
+
       setSavedArticles(articles);
     };
 
-    loadSavedArticles();
-    // Add event listener for storage changes
-    window.addEventListener("storage", loadSavedArticles);
-
-    return () => {
-      window.removeEventListener("storage", loadSavedArticles);
-    };
-  }, []);
+    fetchSavedArticles();
+  }, [user]);
 
   const sortedArticles = [...savedArticles].sort((a, b) => {
     const comparison =
@@ -52,7 +89,7 @@ export default function SavedPage() {
             onChange={(e) =>
               setSortOrder(e.target.value as "newest" | "oldest")
             }
-            className="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-md px-3 py-1 text-sm"
           >
             <option value="newest">Más recientes</option>
             <option value="oldest">Más antiguos</option>

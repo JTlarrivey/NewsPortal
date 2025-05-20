@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { Home, Newspaper, Bookmark, Cloud, X } from "lucide-react";
 import clsx from "clsx";
+import { useUser } from "../hooks/useUser"; // Ajustá si tu hook está en otro lugar
 
 const menuItems = [
   { icon: Home, label: "Principal", path: "/" },
   { icon: Newspaper, label: "Noticias", path: "/news" },
-  { icon: Bookmark, label: "Guardados", path: "/saved" },
+  { icon: Bookmark, label: "Guardados", path: "/saved", requiresAuth: true },
   { icon: Cloud, label: "Clima", path: "/weather" },
 ];
 
@@ -15,6 +16,20 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
+  const user = useUser();
+
+  const handleClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    item: (typeof menuItems)[0]
+  ) => {
+    if (item.requiresAuth && !user) {
+      e.preventDefault();
+      alert("Debes iniciar sesión para guardar noticias.");
+      return;
+    }
+    closeSidebar();
+  };
+
   return (
     <>
       {/* Overlay en mobile */}
@@ -54,7 +69,7 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                 <Link
                   to={item.path}
                   className="flex items-center px-6 py-3 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  onClick={closeSidebar}
+                  onClick={(e) => handleClick(e, item)}
                 >
                   <item.icon className="h-5 w-5 mr-3" />
                   <span className="text-sm font-medium">{item.label}</span>

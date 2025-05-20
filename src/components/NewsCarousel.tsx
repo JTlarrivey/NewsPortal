@@ -34,7 +34,7 @@ export default function NewsCarousel() {
 
         if (carouselItems) {
           const articlesData = carouselItems
-            .flatMap((item) => item.articles) // Aplana la estructura
+            .flatMap((item) => item.articles)
             .filter((article): article is Article => article !== null);
 
           setArticles(articlesData);
@@ -68,7 +68,7 @@ export default function NewsCarousel() {
 
   if (loading) {
     return (
-      <div className="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center bg-gray-100">
+      <div className="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center bg-gray-100 rounded-xl">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
       </div>
     );
@@ -76,19 +76,20 @@ export default function NewsCarousel() {
 
   if (articles.length === 0) {
     return (
-      <div className="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center bg-gray-100">
+      <div className="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center bg-gray-100 rounded-xl">
         <p className="text-gray-500">No hay artículos destacados</p>
       </div>
     );
   }
 
   return (
-    <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden">
+    <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden rounded-xl">
       {articles.map((article, index) => (
-        <div
+        <Link
+          to={`/news/${article.id}`}
           key={article.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === currentSlide ? "opacity-100" : "opacity-0"
+            index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
           {/* Background Image with Gradient Overlay */}
@@ -96,46 +97,45 @@ export default function NewsCarousel() {
             className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${article.image_url})` }}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-xl" />
           </div>
 
           {/* Content */}
-          <div className="absolute inset-0 flex items-end justify-start p-12 text-white">
-            <div className="w-full max-w-5xl lg:max-w-6xl pr-8">
+          <div className="absolute inset-0 flex items-end justify-start p-6 sm:p-12 text-white">
+            <div className="w-full max-w-5xl lg:max-w-6xl pr-4 sm:pr-8">
               <span className="inline-block px-4 py-1 mb-4 text-sm font-semibold bg-white/20 backdrop-blur-sm rounded-full">
                 {article.category}
               </span>
-              <h2 className="text-4xl font-bold mb-4 leading-tight">
+              <h2 className="text-2xl sm:text-4xl font-bold mb-4 leading-tight">
                 {article.title}
               </h2>
-              <p className="text-lg text-gray-200 mb-8">{article.excerpt}</p>
-              <Link
-                to={`/news/${article.id}`}
-                className="px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors"
-              >
+              <p className="text-sm sm:text-lg text-gray-200 mb-8">
+                {article.excerpt}
+              </p>
+              <span className="inline-block px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
                 Leer más
-              </Link>
+              </span>
             </div>
           </div>
-        </div>
+        </Link>
       ))}
 
       {/* Navigation Buttons */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+        className="absolute left-4 top-1/2 -translate-y-1/2 p-1 sm:p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors z-20"
       >
-        <ChevronLeft className="h-6 w-6" />
+        <ChevronLeft className="h-3 w-3 sm:h-3 sm:w-3" />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors"
+        className="absolute right-4 top-1/2 -translate-y-1/2 p-1 sm:p-2 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 transition-colors z-20"
       >
-        <ChevronRight className="h-6 w-6" />
+        <ChevronRight className="h-3 w-3 sm:h-3 sm:w-3" />
       </button>
 
       {/* Slide Indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
         {articles.map((_, index) => (
           <button
             key={index}
