@@ -67,7 +67,7 @@ export default function Home() {
               id={article.id}
               title={article.title}
               excerpt={article.excerpt}
-              image={article.image_url}
+              images={article.image_url ? [article.image_url] : []}
               category={article.category}
               readTime={article.read_time}
             />

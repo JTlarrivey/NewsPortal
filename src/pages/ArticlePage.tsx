@@ -19,7 +19,6 @@ export default function ArticlePage() {
       if (!id) return;
 
       try {
-        // Fetch article data
         const { data: articleData, error: articleError } = await supabase
           .from("articles")
           .select("*")
@@ -27,11 +26,18 @@ export default function ArticlePage() {
           .single();
 
         if (articleError) throw articleError;
+
+        // Limpiar llaves en URLs
+        if (articleData?.image_url && Array.isArray(articleData.image_url)) {
+          articleData.image_url = articleData.image_url.map((url: string) =>
+            url.replace(/[{}]/g, "")
+          );
+        }
+
         setArticle(articleData);
 
-        // Handle metrics with upsert pattern
+        // Manejo de métricas
         const handleMetrics = async () => {
-          // First try to update existing metrics
           const { data: updatedMetrics, error: updateError } = await supabase
             .from("article_metrics")
             .upsert(
@@ -40,10 +46,7 @@ export default function ArticlePage() {
                 views: 1,
                 updated_at: new Date().toISOString(),
               },
-              {
-                onConflict: "article_id",
-                ignoreDuplicates: false,
-              }
+              { onConflict: "article_id", ignoreDuplicates: false }
             )
             .select()
             .single();
@@ -53,7 +56,6 @@ export default function ArticlePage() {
             return;
           }
 
-          // If the upsert failed, try to get current metrics and increment
           const { data: currentMetrics } = await supabase
             .from("article_metrics")
             .select("*")
@@ -108,14 +110,49 @@ export default function ArticlePage() {
     );
   }
 
+  const contentHtml = article.content || "";
+  const paragraphs = contentHtml.split(/<\/p>/).filter(Boolean);
+
+  // Crear array limpio de URLs para evitar llaves
+  const cleanImageUrls = Array.isArray(article.image_url)
+    ? article.image_url.map((url) => url.replace(/[{}]/g, ""))
+    : [];
+
+  const interleavedContent = paragraphs.flatMap((paragraph, index) => {
+    const contentBlock = [
+      <p
+        key={`p-${index}`}
+        dangerouslySetInnerHTML={{ __html: `${paragraph}</p>` }}
+      />,
+    ];
+
+    const imageIndex = Math.floor(index / 2) + 1;
+    const hasExtraImages = cleanImageUrls.length > imageIndex;
+
+    if (index % 2 === 1 && hasExtraImages) {
+      contentBlock.push(
+        <div
+          key={`img-${imageIndex}`}
+          className="my-8 rounded-xl overflow-hidden"
+        >
+          <img
+            src={cleanImageUrls[imageIndex]}
+            alt={`Imagen ${imageIndex + 1}`}
+            className="w-full h-auto object-cover"
+          />
+        </div>
+      );
+    }
+
+    return contentBlock;
+  });
+
   return (
     <article className="max-w-4xl mx-auto px-4 py-8">
-      {/* Category Badge */}
       <span className="inline-block px-4 py-1 text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-full mb-6">
         {article.category}
       </span>
 
-      {/* Title and Excerpt */}
       <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
         {article.title}
       </h1>
@@ -123,7 +160,6 @@ export default function ArticlePage() {
         {article.excerpt}
       </h2>
 
-      {/* Article Metadata */}
       <div className="flex flex-wrap items-center gap-6 mb-8 text-gray-500 dark:text-gray-400">
         <div className="flex items-center">
           <Clock className="h-5 w-5 mr-2" />
@@ -144,22 +180,22 @@ export default function ArticlePage() {
         </div>
       </div>
 
-      {/* Featured Image */}
-      <div className="relative aspect-video mb-8 rounded-xl overflow-hidden">
-        <img
-          src={article.image_url}
-          alt={article.title}
-          className="w-full h-full object-cover"
-        />
+      {/* Imagen principal */}
+      {cleanImageUrls[0] && (
+        <div className="relative aspect-video mb-8 rounded-xl overflow-hidden">
+          <img
+            src={cleanImageUrls[0]}
+            alt={article.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      {/* Contenido con imágenes intercaladas */}
+      <div className="prose prose-lg dark:dark:text-gray-300 prose-invert max-w-none mb-12">
+        {interleavedContent}
       </div>
 
-      {/* Article Content */}
-      <div
-        className="prose prose-lg dark:dark:text-gray-300 prose-invert max-w-none mb-12"
-        dangerouslySetInnerHTML={{ __html: article.content || "" }}
-      />
-
-      {/* Video Section (if provided) */}
       {article.video_url && (
         <div className="mt-8 mb-12">
           <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">

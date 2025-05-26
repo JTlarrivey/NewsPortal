@@ -8,7 +8,7 @@ interface ArticleProps {
   id: string;
   title: string;
   excerpt: string;
-  image: string;
+  images?: string[]; // array de URLs
   category: string;
   readTime: string;
 }
@@ -17,12 +17,24 @@ export default function ArticleCard({
   id,
   title,
   excerpt,
-  image,
+  images = [],
   category,
   readTime,
 }: ArticleProps) {
   const [isSaved, setIsSaved] = useState(false);
   const { user } = useAuth();
+
+  // Limpiar llaves {} de las URLs si vienen así
+  const flatImages = images.flat(); // Aplana arrays anidados
+  const cleanImages = flatImages
+    .filter((url): url is string => typeof url === "string")
+    .map((url) => {
+      const trimmed = url.trim();
+      const cleaned = trimmed.replace(/^\{(.*)\}$/, "$1");
+      return cleaned;
+    });
+
+  const firstImage = cleanImages.find((img) => img); // la primera no vacía
 
   useEffect(() => {
     const checkIfSaved = async () => {
@@ -82,11 +94,14 @@ export default function ArticleCard({
 
   return (
     <article className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-      <img
-        src={image}
-        alt={title}
-        className="w-full h-48 object-cover hover:opacity-90 transition-opacity"
-      />
+      {firstImage && (
+        <img
+          src={firstImage}
+          alt={title}
+          className="w-full h-48 object-cover hover:opacity-90 transition-opacity"
+        />
+      )}
+
       <div className="p-6">
         <div className="flex items-center mb-4">
           <span className="px-3 py-1 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-full">

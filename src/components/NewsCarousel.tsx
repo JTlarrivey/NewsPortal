@@ -84,41 +84,56 @@ export default function NewsCarousel() {
 
   return (
     <div className="relative h-[calc(100vh-4rem)] w-full overflow-hidden rounded-xl">
-      {articles.map((article, index) => (
-        <Link
-          to={`/news/${article.id}`}
-          key={article.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
-          }`}
-        >
-          {/* Background Image with Gradient Overlay */}
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${article.image_url})` }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-xl" />
-          </div>
+      {articles.map((article, index) => {
+        const flatImages = Array.isArray(article.image_url)
+          ? article.image_url.flat()
+          : [];
 
-          {/* Content */}
-          <div className="absolute inset-0 flex items-end justify-start p-6 sm:p-12 text-white">
-            <div className="w-full max-w-5xl lg:max-w-6xl pr-4 sm:pr-8">
-              <span className="inline-block px-4 py-1 mb-4 text-sm font-semibold bg-white/20 backdrop-blur-sm rounded-full">
-                {article.category}
-              </span>
-              <h2 className="text-2xl sm:text-4xl font-bold mb-4 leading-tight">
-                {article.title}
-              </h2>
-              <p className="text-sm sm:text-lg text-gray-200 mb-8">
-                {article.excerpt}
-              </p>
-              <span className="inline-block px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
-                Leer más
-              </span>
+        const cleanImages = flatImages
+          .filter((url): url is string => typeof url === "string")
+          .map((url) => {
+            const trimmed = url.trim();
+            return trimmed.replace(/^\{(.*)\}$/, "$1");
+          });
+
+        const firstImage = cleanImages[0];
+
+        return (
+          <Link
+            to={`/news/${article.id}`}
+            key={article.id}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          >
+            {/* Background Image with Gradient Overlay */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${firstImage})` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-xl" />
             </div>
-          </div>
-        </Link>
-      ))}
+
+            {/* Content */}
+            <div className="absolute inset-0 flex items-end justify-start p-6 sm:p-12 text-white">
+              <div className="w-full max-w-5xl lg:max-w-6xl pr-4 sm:pr-8">
+                <span className="inline-block px-4 py-1 mb-4 text-sm font-semibold bg-white/20 backdrop-blur-sm rounded-full">
+                  {article.category}
+                </span>
+                <h2 className="text-2xl sm:text-4xl font-bold mb-4 leading-tight">
+                  {article.title}
+                </h2>
+                <p className="text-sm sm:text-lg text-gray-200 mb-8">
+                  {article.excerpt}
+                </p>
+                <span className="inline-block px-6 py-2 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors">
+                  Leer más
+                </span>
+              </div>
+            </div>
+          </Link>
+        );
+      })}
 
       {/* Navigation Buttons */}
       <button
